@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#111112" />
+  <title>Castle Crush: Aide Escape</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+
+<style>
+    #rosebud-exported-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+        opacity: 1;
+        transition: opacity 500ms ease-in-out;
+        .rosebud-exported-splash, 
+[class*="rosebud-exported-splash"] {
+  display: none !important;
+}
+    }
+
+    #rosebud-exported-splash.is-hiding {
+        opacity: 0;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        text-align: center;
+        color: #fff;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__logo {
+        width: 100px;
+        height: 100px;
+        animation: rosebud-exported-splash-breathe 2.4s ease-in-out infinite;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 16px;
+        line-height: 1.25;
+        letter-spacing: 0.06em;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__text strong {
+        font-weight: 700;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__text span:last-child {
+        opacity: 0.88;
+    }
+
+    @keyframes rosebud-exported-splash-breathe {
+        0%,
+        100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+</style></head>
+<body>
+<div id="rosebud-exported-splash" aria-live="polite">
+    <div class="rosebud-exported-splash__content">
+        <img
+            class="rosebud-exported-splash__logo"
+            src="__rosebud/rosebud-icon.png"
+            alt="Rosebud Logo"
+            width="100"
+            height="100"
+        />
+        <div class="rosebud-exported-splash__text" aria-label="Rosebud.AI Make Games">
+            <strong>Rosebud.AI</strong>
+            <span>Make Games</span>
+        </div>
+    </div>
+</div>
+  <main id="gameShell" aria-label="Castle Crush match three game">
+    <section class="cinematic-intro" id="cinematicIntro" role="dialog" aria-modal="true" aria-labelledby="cinematicTitle">
+      <div class="cinematic-stars" aria-hidden="true"></div>
+      <div class="cinematic-panel">
+        <p class="cinematic-kicker" id="cinematicKicker">A PIRATE RESCUE ADVENTURE</p>
+        <div class="cinematic-emblem" aria-hidden="true">✦</div>
+        <h1 id="cinematicTitle">CASTLE <span>CRUSH</span></h1>
+        <div class="cinematic-rule" aria-hidden="true"><i></i><b>♛</b><i></i></div>
+        <p class="cinematic-tagline" id="cinematicTagline">Match. Break the walls. Set them free.</p>
+        <button class="cinematic-skip" id="cinematicSkip" type="button">SKIP</button>
+      </div>
+    </section>
+    <div class="top-actions">
+      <div class="music-control" id="musicControl" role="group" aria-label="Background music volume">
+        <button class="sound-switch music-toggle" id="musicVolumeButton" type="button" aria-label="Mute background music" title="Mute background music" aria-pressed="false"><span id="musicVolumeIcon" aria-hidden="true">🔊</span></button>
+        <input class="music-volume-range" id="musicVolumeRange" type="range" min="0" max="1" step="0.01" value="0.28" aria-label="Background music volume" />
+      </div>
+      <button class="sound-switch" id="characterSoundButton" type="button" aria-label="Mute character sounds" title="Mute character sounds"><span id="characterSoundIcon" aria-hidden="true">🔊</span></button>
+      <button class="trophy-button hidden" id="trophyButton" type="button" aria-label="Claim bonus trophy" title="Claim bonus trophy" aria-hidden="true"><span class="trophy-icon" aria-hidden="true">🏆</span><span class="trophy-count" id="trophyCount">0</span></button>
+      <button class="fullscreen-button" id="fullscreenButton" type="button" aria-label="Open full screen" title="Open full screen" aria-pressed="false"><span id="fullscreenIcon" aria-hidden="true">⛶</span></button>
+      <button class="language-switch" id="languageButton" type="button" aria-label="Switch to English" title="Switch to English"><span id="languageIcon">EN</span></button>
+    </div>
+    <section class="castle-scene" id="castleScene" aria-label="Current castle level">
+      <button class="next-level-button" id="headerNext" aria-label="Rescue current character" title="Rescue current character">→</button>
+      <div class="brick-wall wall-left"></div>
+      <div class="brick-wall wall-right"></div>
+      <div class="stone-tower"></div>
+      <div class="completed-stage-characters hidden" id="completedStageCharacters" aria-live="polite" aria-label="Completed stage characters"></div>
+      <div class="escape-path" id="escapePath" aria-label="Trump figure blockade path">
+        <div class="path-floor"></div>
+        <div class="obstacle trump" data-block="0"><img class="trump-image" src="assets/pirate_trump_figure_new-2.webp" alt="Trump figure blockade" /></div><div class="obstacle trump" data-block="1"><img class="trump-image" src="assets/pirate_trump_figure_new-2.webp" alt="Trump figure blockade" /></div><div class="obstacle trump" data-block="2"><img class="trump-image" src="assets/pirate_trump_figure_new-2.webp" alt="Trump figure blockade" /></div><div class="obstacle trump" data-block="3"><img class="trump-image" src="assets/pirate_trump_figure_new-2.webp" alt="Trump figure blockade" /></div><div class="obstacle trump" data-block="4"><img class="trump-image" src="assets/pirate_trump_figure_new-2.webp" alt="Trump figure blockade" /></div>
+        <div class="obstacle trump" data-block="5"><img class="trump-image" src="assets/pirate_trump_figure_new-2.webp" alt="Trump figure blockade" /></div><div class="obstacle trump" data-block="6"><img class="trump-image" src="assets/pirate_trump_figure_new-2.webp" alt="Trump figure blockade" /></div><div class="obstacle trump" data-block="7"><img class="trump-image" src="assets/pirate_trump_figure_new-2.webp" alt="Trump figure blockade" /></div><div class="obstacle trump" data-block="8"><img class="trump-image" src="assets/pirate_trump_figure_new-2.webp" alt="Trump figure blockade" /></div><div class="obstacle trump" data-block="9"><img class="trump-image" src="assets/pirate_trump_figure_new-2.webp" alt="Trump figure blockade" /></div>
+      </div>
+      <div class="wall-opening" id="wallOpening" aria-hidden="true"></div>
+      <div class="rescue-speech" id="rescueSpeech" role="status" aria-hidden="true">أنقذوني!</div>
+      <div class="scene-vignette"></div>
+      <div class="scene-label"><span id="levelKicker">جولة رقم 1</span><strong id="levelTitle">Save President Trump</strong></div>
+      <button class="nav-button side-levels-button" id="levelsButton" aria-label="Choose level"><span class="level-grid-icon">▦</span><small id="levelsLabel">LEVELS</small></button>
+      <div class="aide-pedestal" id="aideWalker" aria-live="polite">
+        <div class="character-figure"><img id="aidePortrait" src="assets/pirate_trump_figure_new.webp" alt="President Trump" /></div>
+        <div class="aide-flag"><span id="aideLabel">AIDE</span> <b id="aideNumber">01</b></div>
+        <div class="portrait-pending" id="portraitPending">PRESIDENT TRUMP</div>
+      </div>
+      <div class="prisoner-shadow"></div>
+      <div class="exit-marker" aria-hidden="true"><span>EXIT</span><b>↗</b></div>
+      <div class="lock-badge" aria-hidden="true">✦</div>
+    </section>
+
+    <section class="board-section" id="boardSection" aria-label="Match three board">
+      <div class="mission-bar">
+        <div class="mission-copy"><span class="tiny-crown">♛</span><span id="missionText">SCORE 100 POINTS</span></div>
+        <div class="stats-box"><div><small id="pointsLabel">POINTS</small><b><span id="scoreValue" aria-live="polite">0</span>/100</b></div><div><small id="movesLabel">MOVES</small><b id="movesValue">24</b></div></div>
+      </div>
+      <div class="goal-row" id="goalRow"></div>
+      <div class="board-frame">
+        <div class="board" id="board" role="grid" aria-label="Puzzle tiles"></div>
+      </div>
+      <div class="board-tip"><span class="tip-arrow">›</span> <span id="boardTipText">Swap two adjacent tiles to make 3 or more</span> <strong id="boardMatchText">MATCH = +10 PTS</strong></div>
+    </section>
+
+    <nav class="bottom-nav" aria-label="Game controls">
+      <div class="progress-dots" id="progressDots" aria-label="Level progress"></div>
+      <button class="nav-button" id="resetButton" aria-label="Restart level"><span class="restart-icon">↻</span><small id="restartLabel">RESTART</small></button>
+    </nav>
+
+    <div class="modal-backdrop hidden" id="modalBackdrop">
+      <section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+        <div class="modal-emblem">♛</div>
+        <p class="modal-kicker" id="modalKicker">LEVEL COMPLETE</p>
+        <h1 id="modalTitle">The gate is open!</h1>
+        <p id="modalMessage">You cleared the blockade and rescued the aide.</p>
+        <button class="primary-button" id="modalAction">NEXT LEVEL <span>→</span></button>
+      </section>
+    </div>
+
+    <div class="level-drawer hidden" id="levelDrawer">
+      <div class="drawer-head"><h2 id="drawerTitle">Castle map</h2><button id="drawerClose" aria-label="Close levels">×</button></div>
+      <p id="drawerCopy">Choose a level to replay.</p>
+      <div class="level-list" id="levelList"></div>
+    </div>
+
+    <section class="start-overlay hidden" id="startOverlay" role="dialog" aria-modal="true" aria-labelledby="startTitle">
+      <div class="start-panel">
+        <p class="start-kicker" id="startKicker">CASTLE CRUSH</p>
+        <h2 id="startTitle">امسكوا Hegseth</h2>
+        <p class="start-copy" id="startCopy">اختر أي مرحلة وابدأ الهروب من القلعة.</p>
+        <div class="journey-frame">
+          <div class="start-portraits" aria-hidden="true">
+            <img src="assets/pirate_trump_figure_new-2.webp" alt="" />
+            <img src="assets/pirate_vance_figure_new.webp" alt="" />
+            <img src="assets/pirate_hegseth_figure_new.webp" alt="" />
+            <img src="assets/pirate_rubio_figure_new.webp" alt="" />
+            <img src="assets/pirate_witkopf_figure_new.webp" alt="" />
+            <img src="assets/pirate_kushner_figure_new.webp" alt="" />
+          </div>
+          <div class="journey-frame-line" aria-hidden="true"><span></span><i>✦</i><span></span></div>
+          <div class="start-level-list" id="startLevelList" aria-label="Rescue journeys"></div>
+          <div class="start-selection">
+            <span class="start-selected-label" id="startSelectedLabel">Selected stage</span>
+            <button class="start-play-button" id="startPlayButton" type="button">LET’S PLAY <span>→</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
+  <script type="module" src="./main.js"></script>
+
+<script>
+    (() => {
+        const splashRoot = document.getElementById('rosebud-exported-splash');
+        if (!splashRoot) return;
+
+        let isReady = false;
+        let isMinimumVisibleTimeElapsed = false;
+        let isHidden = false;
+
+        const maybeHideSplash = () => {
+            if (isHidden || !isReady || !isMinimumVisibleTimeElapsed) return;
+
+            isHidden = true;
+            splashRoot.classList.add('is-hiding');
+            window.setTimeout(() => splashRoot.remove(), 500);
+        };
+
+        const markReady = () => {
+            isReady = true;
+            maybeHideSplash();
+        };
+
+        window.setTimeout(() => {
+            isMinimumVisibleTimeElapsed = true;
+            maybeHideSplash();
+        }, 1000);
+
+        if (document.readyState === 'complete') {
+            markReady();
+        } else {
+            window.addEventListener('load', markReady, { once: true });
+        }
+
+        
+    })();
+</script></body>
+</html>

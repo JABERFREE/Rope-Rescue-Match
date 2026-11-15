@@ -1,0 +1,16 @@
+{
+  "name": "Rope Rescue",
+  "revisionLabel": "Made updates",
+  "description": "Create a pirate-themed puzzle game inspired by “Save the King,” where the goal is to rescue the President (Trump) from pirate danger. The player controls the President’s aides as rescuers and uses ropes and hooks to swing, grab, and pull to free Trump and guide him to safety. Each puzzle is a self-contained layout that requires planning the order and placement of rope-and-hook actions to reach the rescue goal.",
+  "mode": "Universal",
+  "exportDate": "2026-09-02T20:49:11.892Z",
+  "rosebudBuiltInSplash": {
+    "present": true,
+    "version": 1
+  },
+  "assetCount": 68,
+  "assetTypes": [
+    "image",
+    "audio"
+  ]
+}
